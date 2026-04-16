@@ -762,7 +762,16 @@ body.chat-active .input-bar {
   .stripe-right { right: 8px; }
   .stripe { width: 6px; height: 45px; }
 
-  .quick-grid { grid-template-columns: 1fr; }
+  .disclaimer-alert {
+    white-space: normal;
+    width: 100%;
+    font-size: 13px;
+  }
+
+  .quick-card { 
+    flex: 1 1 100%;
+    max-width: 100%; 
+  }
 
   .msg-inner { padding: 0 16px; }
   .input-bar { padding: 10px 16px 14px; }
