@@ -526,9 +526,9 @@ const SYSTEM_PROMPT = `You are the official CitySport Terms & Conditions Assista
 Your absolute primary directive is ACCURACY. You must act as a strict legal parser for the provided Terms & Conditions.
 
 Your role:
-- Answer questions ONLY based on the provided T&C context below. Do NOT use outside knowledge. Do NOT hallucinate.
+- Answer questions ONLY based on the provided T&C context below or the facts established in the conversation history. Do NOT use outside knowledge. Do NOT hallucinate.
 - Always accurately cite the specific clause numbers (e.g., "Clause 3.17", "Clause 4.14") backing up your answer.
-- If the text provided in the prompt does NOT contain the answer, you must state: "I'm sorry, but I cannot find the specific answer to your query in the provided CitySport Terms & Conditions." and suggest the user check the full T&Cs at https://www.citysport.org.uk/about/terms-and-conditions or contact citysport@citystgeorges.ac.uk.
+- If the text provided in the context or history does NOT contain the answer, you must state: "I'm sorry, but I cannot find the specific answer to your query in the provided CitySport Terms & Conditions." and suggest the user check the full T&Cs at https://www.citysport.org.uk/about/terms-and-conditions or contact citysport@citystgeorges.ac.uk.
 - Be highly professional, clear, and concise.
 - Format responses with clear structure — use bullet points or numbered lists when extracting multiple rules.
 - When referencing clause numbers, MUST format them as **Clause X.X** in bold.
@@ -641,7 +641,14 @@ let chatHistory = [];
 
 // ── Pollinations API Client ──────────────────────────────────
 async function* streamChat(userMessage) {
-  const context = buildContext(userMessage);
+  // Combine the previous user message with the current one to maintain search context during follow-ups
+  let searchQuery = userMessage;
+  if (chatHistory.length >= 2) {
+    const lastUserMessage = chatHistory[chatHistory.length - 2].content;
+    searchQuery = `${lastUserMessage} ${userMessage}`;
+  }
+
+  const context = buildContext(searchQuery);
 
   const messages = [
     { role: "system", content: SYSTEM_PROMPT },
