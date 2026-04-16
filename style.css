@@ -768,9 +768,26 @@ body.chat-active .input-bar {
     font-size: 13px;
   }
 
+  .quick-grid {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 12px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    margin: 0 -24px; /* break out of container padding */
+    padding: 0 24px 12px; /* restore inner padding */
+  }
+  
+  .quick-grid::-webkit-scrollbar {
+    height: 0px; /* hide scrollbar for clean swipe */
+    display: none;
+  }
+
   .quick-card { 
-    flex: 1 1 100%;
-    max-width: 100%; 
+    flex: 0 0 calc(100% - 40px); /* Fill most of the screen width */
+    max-width: none; 
+    scroll-snap-align: center;
   }
 
   .msg-inner { padding: 0 16px; }
