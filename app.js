@@ -793,7 +793,7 @@ async function handleSend() {
     // Append to history for conversational memory
     chatHistory.push({ role: "user", content: message });
     chatHistory.push({ role: "assistant", content: fullResponse });
-    
+
     // Keep the last 10 pairs of messages (20 total) to prevent context explosion
     if (chatHistory.length > 20) {
       chatHistory = chatHistory.slice(chatHistory.length - 20);
@@ -898,6 +898,12 @@ function formatResponse(text) {
   html = html.replace(
     /\b(Clause\s+\d+(?:\.\d+)*(?:\.\d+)?)/gi,
     `<a href="${CONFIG.tcUrl}" target="_blank" rel="noopener" class="clause-ref" title="View on CitySport website">§ $1</a>`
+  );
+
+  // Inline cite markers like [cite: 4.14] — render in red
+  html = html.replace(
+    /\[cite:\s*(\d+(?:\.\d+)*)\]/gi,
+    `<a href="${CONFIG.tcUrl}" target="_blank" rel="noopener" class="clause-ref" title="View on CitySport website">[cite: $1]</a>`
   );
 
   // Line breaks
